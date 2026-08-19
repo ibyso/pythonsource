@@ -18,6 +18,7 @@
 
 import time
 import random
+import sqlite3
 
 def wordPractice () :
     try :
@@ -50,6 +51,27 @@ def wordPractice () :
     else :
         print("불합격")
 
+    saveWordResult(score,total_time)
+
+
+def saveWordResult (score,et) :
+    conn = sqlite3.connect("./db/test.db",isolation_level=None)
+    cursor = conn.cursor()
+    sql = """create table if not exists records(
+    score integer,
+    record text,
+    regdate text
+    )"""
+
+    cursor.execute(sql)
+
+    #insert 작업(기록 삽입)
+    from datetime import datetime
+    now = datetime.now()
+    nowDatetime = now.strftime("%Y-%m-%d %H:%M:%S")
+
+    sql = "insert into records (score,record,regdate) values (?,?,?)"
+    cursor.execute(sql,(score,et,nowDatetime))
 
 
 
